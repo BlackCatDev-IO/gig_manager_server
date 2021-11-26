@@ -1,4 +1,6 @@
 import * as mongoose from 'mongoose';
+import { CompanySchema } from 'src/company/schema/company.schema';
+import { JobSchema } from 'src/job/schema/job.schema';
 
 export const UserSchema = new mongoose.Schema({
   firstName: String,
@@ -6,4 +8,6 @@ export const UserSchema = new mongoose.Schema({
   email: String,
   rate: Number,
   phoneNumber: Number,
+  companies: [CompanySchema],
+  jobs: [JobSchema],
 });

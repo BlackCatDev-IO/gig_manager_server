@@ -10,35 +10,43 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateJobDto } from 'src/job/dto/create-job.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/add')
-  create(@Body() createUserDto: CreateUserDto) {
+  createUser(@Body() createUserDto: CreateUserDto) {
     console.log(createUserDto);
 
     return this.userService.create(createUserDto);
   }
 
   @Get('/all')
-  findAll() {
+  findAllUsers() {
     return this.userService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOneUser(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
+  }
+
+  @Post(':id')
+  createJob(@Param('id') id: string, @Body() createJobDto: CreateJobDto) {
+    console.log(createJobDto);
+
+    return this.userService.addNewJob(id, createJobDto);
   }
 }
