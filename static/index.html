@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css">
+    <title>Harvard Club Labor Tracker</title>
+  </head>
+  <body>
+    <form action="/" id="form" method="post">
+      <ul>
+   
+        <li>
+          <label for="job title">Job Title</label>
+          <input type="text" id="job title" name="jobTitle" />
+        </li>
+ 
+     
+        <li>
+          <label for="Gig start">Event Start:</label>
+          <input type="datetime-local" id="event start" name="eventStart"></input>
+        </li>
+        <li>
+          <label for="Gig end">Event End:</label>
+          <input  type="datetime-local" id="event end" name="eventEnd"></input>
+        </li>
+        <li>
+          <label for="job status">Job Status:</label>
+          <input id="job status" name="jobStatus"></input>
+        </li>
+        <li class="button">
+          <button type="submit">Add Job</button>
+        </li>
+      </ul>
+    </form>
+  </body>
+</html>
