@@ -29,7 +29,7 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get('/find')
+  @Post('/find')
   checkIfUserExists(@Body('email') email: string): Promise<boolean> {
     console.log(email);
 
