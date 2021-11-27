@@ -7,7 +7,7 @@ export const JobSchema = new mongoose.Schema({
   jobTitle: String,
   location: String,
   description: String,
-  startData: Date,
+  startDate: Date,
   endDate: Date,
   callTime: Date,
 });

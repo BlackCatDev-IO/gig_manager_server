@@ -62,4 +62,9 @@ export class UserService {
     // const result = await newJob.save();
     return newJob;
   }
+
+  async userExists(email: string): Promise<boolean> {
+    const user = await this.userModel.findOne({ email: email });
+    return user != null;
+  }
 }

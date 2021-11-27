@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -26,6 +27,13 @@ export class UserController {
   @Get('/all')
   findAllUsers() {
     return this.userService.findAll();
+  }
+
+  @Get('/find')
+  checkIfUserExists(@Body('email') email: string): Promise<boolean> {
+    console.log(email);
+
+    return this.userService.userExists(email);
   }
 
   @Get(':id')
