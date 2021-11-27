@@ -4,7 +4,7 @@ export class CreateJobDto {
   jobTitle: string;
   location?: string;
   description?: string;
-  startData: Date;
-  endDate: Date;
+  startDate?: Date;
+  endDate?: Date;
   callTime?: Date;
 }

@@ -1,15 +1,38 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User } from 'src/user/entities/user.entity';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
+import { Job } from './entities/job.entity';
 
 @Injectable()
 export class JobService {
-  create(createJobDto: CreateJobDto) {
-    return 'This action adds a new job';
+  constructor(
+    @InjectModel('Job')
+    private readonly jobModel: Model<Job>,
+    @InjectModel('User') private readonly userModel: Model<User>,
+  ) {}
+
+  async addJob(createJobDto: CreateJobDto): Promise<Job> {
+    const id = createJobDto.userId;
+    const user = await this.userModel.findById(id);
+    const newJob = new this.jobModel(createJobDto);
+    const userJobList: Job[] = user.jobs ?? [];
+    userJobList.push(newJob);
+    const updatedUser = { jobs: userJobList };
+    await this.userModel.findByIdAndUpdate(id, updatedUser);
+    return newJob;
   }
 
-  findAll() {
-    return `This action returns all job`;
+  async listAllJobs(id: string): Promise<Job[]> {
+    const user = await this.userModel.findById(id);
+    return user.jobs;
+  }
+
+  async findAllJobs(id: string): Promise<Job[]> {
+    const user = await this.userModel.findById(id);
+    return user.jobs;
   }
 
   findOne(id: number) {

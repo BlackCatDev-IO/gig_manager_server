@@ -6,12 +6,10 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { CreateJobDto } from 'src/job/dto/create-job.dto';
 
 @Controller('user')
 export class UserController {
@@ -21,7 +19,7 @@ export class UserController {
   createUser(@Body() createUserDto: CreateUserDto) {
     console.log(createUserDto);
 
-    return this.userService.create(createUserDto);
+    return this.userService.createUser(createUserDto);
   }
 
   @Get('/all')
@@ -49,12 +47,5 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
-  }
-
-  @Post(':id')
-  createJob(@Param('id') id: string, @Body() createJobDto: CreateJobDto) {
-    console.log(createJobDto);
-
-    return this.userService.addNewJob(id, createJobDto);
   }
 }

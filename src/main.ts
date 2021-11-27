@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'static'));
 
   const config = new DocumentBuilder()
-    .setTitle('Project Manager')
+    .setTitle('Gig Manager')
     .setDescription('Project Tracker')
     .setVersion('1.0')
     .addTag('Users')

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { JobService } from './job.service';
 import { CreateJobDto } from './dto/create-job.dto';
@@ -17,12 +18,13 @@ export class JobController {
 
   @Post()
   create(@Body() createJobDto: CreateJobDto) {
-    return this.jobService.create(createJobDto);
+    console.log(createJobDto.userId);
+    return this.jobService.addJob(createJobDto);
   }
 
-  @Get()
-  findAll() {
-    return this.jobService.findAll();
+  @Get('/all/:id')
+  findAll(@Param('id') id: string) {
+    return this.jobService.findAllJobs(id);
   }
 
   @Get(':id')
@@ -38,5 +40,13 @@ export class JobController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.jobService.remove(+id);
+  }
+
+  @Put('/add')
+  createJob(@Body() createJobDto: CreateJobDto) {
+    console.log('job bitach');
+
+    console.log(createJobDto.userId);
+    return this.jobService.addJob(createJobDto);
   }
 }
