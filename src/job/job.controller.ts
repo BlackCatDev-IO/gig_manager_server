@@ -11,6 +11,8 @@ import {
 import { JobService } from './job.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
+import { DeleteJobDto } from './dto/delete-job.dto';
+import { UpdateResult } from 'mongodb';
 
 @Controller('job')
 export class JobController {
@@ -34,18 +36,16 @@ export class JobController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateJobDto: UpdateJobDto) {
-    return this.jobService.update(+id, updateJobDto);
+    return this.jobService.update(id, updateJobDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.jobService.remove(+id);
+  @Delete('delete')
+  remove(@Body() deleteJobDto: DeleteJobDto): Promise<UpdateResult> {
+    return this.jobService.deleteJob(deleteJobDto);
   }
 
   @Put('/add')
   createJob(@Body() createJobDto: CreateJobDto) {
-    console.log('job bitach');
-
     console.log(createJobDto.userId);
     return this.jobService.addJob(createJobDto);
   }

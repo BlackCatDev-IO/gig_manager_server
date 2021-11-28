@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { UpdateResult } from 'mongodb';
 import { Model } from 'mongoose';
 import { User } from 'src/user/entities/user.entity';
 import { CreateJobDto } from './dto/create-job.dto';
+import { DeleteJobDto } from './dto/delete-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { Job } from './entities/job.entity';
 
@@ -39,11 +41,14 @@ export class JobService {
     return `This action returns a #${id} job`;
   }
 
-  update(id: number, updateJobDto: UpdateJobDto) {
+  update(id: string, updateJobDto: UpdateJobDto) {
     return `This action updates a #${id} job`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} job`;
+  async deleteJob(deleteJobDto: DeleteJobDto): Promise<UpdateResult> {
+    return await this.userModel.updateOne(
+      { _id: deleteJobDto.userId },
+      { $pull: { jobs: { _id: deleteJobDto.jobId } } },
+    );
   }
 }
