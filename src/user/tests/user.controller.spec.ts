@@ -15,11 +15,12 @@ describe('UserController', () => {
   const mockUserService = {
     createUser: jest.fn((createUserDto) => {
       return {
+        id: '123',
         ...createUserDto,
       };
     }),
 
-    update: jest.fn((id, updateUserDto) => ({
+    update: jest.fn((updateUserDto) => ({
       ...updateUserDto,
     })),
 
@@ -77,6 +78,7 @@ describe('UserController', () => {
       lastName: 'Boberson',
       email: 'bob@gmail.com',
     };
+
     user2 = {
       id: '2',
       firstName: 'Dave',
@@ -90,44 +92,42 @@ describe('UserController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should create a user', () => {
-    expect(controller.createUser(createUserDto)).toEqual({
-      firstName: 'nunya',
-      lastName: 'bizzness',
-      email: 'nunyabizzness@gmail.com',
-      phoneNumber: null,
-      rate: 60,
+  it('should create a user', async () => {
+    expect(await controller.createUser(createUserDto)).toEqual({
+      id: '123',
+      ...createUserDto,
     });
 
     expect(mockUserService.createUser).toHaveBeenCalledWith(createUserDto);
   });
 
-  it('should find all users', () => {
-    expect(controller.findAllUsers()).toEqual({ userList });
-
-    expect(mockUserService.findAll).toHaveBeenCalled();
-  });
-
-  it('should return true if user exists', () => {
-    expect(controller.checkIfUserExists('dave@gmail.com')).toEqual(true);
-    expect(controller.checkIfUserExists('bob@gmail.com')).toEqual(true);
-    expect(controller.checkIfUserExists('idontexist@aol.com')).toEqual(false);
+  it('should return true if user exists', async () => {
+    expect(await controller.checkIfUserExists('dave@gmail.com')).toEqual(true);
+    expect(await controller.checkIfUserExists('bob@gmail.com')).toEqual(true);
+    expect(await controller.checkIfUserExists('idontexist@aol.com')).toEqual(
+      false,
+    );
 
     expect(mockUserService.userExists).toHaveBeenCalled();
   });
 
-  it('should find one user by id', () => {
-    expect(controller.findOneUser('1')).toEqual(user1);
+  it('should find one user by id', async () => {
+    expect(await controller.findOneUser('1')).toEqual(user1);
     expect(mockUserService.findOne).toHaveBeenCalledWith('1');
   });
 
-  it('should update a user', () => {
+  it('should update a user', async () => {
     const updateUserDTO: UpdateUserDto = createUserDto as UpdateUserDto;
-    updateUserDTO.id = '1234';
+    updateUserDTO.id = '123';
     updateUserDTO.rate = 70;
 
-    expect(controller.updateUser(updateUserDTO.id, updateUserDTO)).toEqual({
-      id: '1234',
+    const update = await controller.updateUser(updateUserDTO.id, updateUserDTO);
+    console.log(update);
+
+    expect(
+      await controller.updateUser(updateUserDTO.id, updateUserDTO),
+    ).toEqual({
+      id: '123',
       firstName: 'nunya',
       lastName: 'bizzness',
       email: 'nunyabizzness@gmail.com',
@@ -135,10 +135,7 @@ describe('UserController', () => {
       rate: 70,
     });
 
-    expect(mockUserService.update).toHaveBeenCalledWith(
-      updateUserDTO.id,
-      updateUserDTO,
-    );
+    expect(mockUserService.update).toHaveBeenCalledWith(updateUserDTO);
   });
 
   it('should delete one user by id and return deleted user', () => {

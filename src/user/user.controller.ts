@@ -10,38 +10,44 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserDoc } from './entities/user.doc';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService, // private readonly fileService: FileService,
+  ) {}
 
   @Post('/add')
-  createUser(@Body() createUserDto: CreateUserDto) {
-    console.log(createUserDto);
-
+  async createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 
   @Get('/all')
-  findAllUsers() {
+  async findAllUsers(): Promise<UserDoc[]> {
     return this.userService.findAll();
   }
 
   @Post('/find')
-  checkIfUserExists(@Body('email') email: string): Promise<boolean> {
+  async checkIfUserExists(@Body('email') email: string): Promise<boolean> {
     console.log(email);
 
     return this.userService.userExists(email);
   }
 
   @Get(':id')
-  findOneUser(@Param('id') id: string) {
+  async findOneUser(@Param('id') id: string): Promise<UserDoc> {
     return this.userService.findOne(id);
   }
 
   @Patch(':id')
-  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    const dto = updateUserDto;
+    dto.id = id;
+    return this.userService.update(dto);
   }
 
   @Delete(':id')
