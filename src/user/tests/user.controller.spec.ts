@@ -44,7 +44,7 @@ describe('UserController', () => {
       }
     }),
 
-    remove: jest.fn((id: string) => {
+    deleteUser: jest.fn((id: string) => {
       for (const user of userList) {
         if (user.id === id) {
           return user;
@@ -139,7 +139,7 @@ describe('UserController', () => {
   });
 
   it('should delete one user by id and return deleted user', () => {
-    expect(controller.remove('1')).toEqual(user1);
-    expect(mockUserService.remove).toHaveBeenCalledWith('1');
+    expect(controller.deleteUser('1')).toEqual(user1);
+    expect(mockUserService.deleteUser).toHaveBeenCalledWith('1');
   });
 });

@@ -10,7 +10,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserDoc } from './entities/user.doc';
+import { User } from './entities/user.entity';
 
 @Controller('user')
 export class UserController {
@@ -24,7 +24,7 @@ export class UserController {
   }
 
   @Get('/all')
-  async findAllUsers(): Promise<UserDoc[]> {
+  async findAllUsers(): Promise<User[]> {
     return this.userService.findAll();
   }
 
@@ -36,7 +36,7 @@ export class UserController {
   }
 
   @Get(':id')
-  async findOneUser(@Param('id') id: string): Promise<UserDoc> {
+  async findOneUser(@Param('id') id: string): Promise<User> {
     return this.userService.findOne(id);
   }
 
@@ -51,7 +51,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(id);
+  deleteUser(@Param('id') id: string) {
+    return this.userService.deleteUser(id);
   }
 }
