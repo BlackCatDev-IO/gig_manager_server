@@ -6,13 +6,19 @@ import {
   Patch,
   Param,
   Delete,
-  ConflictException,
+  UseFilters,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { HttpExceptionFilter } from 'src/error-handling/exception.filters';
+import {
+  UserAlreadyExistsException,
+  UserNotFoundException,
+} from 'src/error-handling/custom-exceptions';
 
+@UseFilters(HttpExceptionFilter)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -20,11 +26,9 @@ export class UserController {
   @Post('/add')
   async createUser(@Body() createUserDto: CreateUserDto) {
     if (await this.userService.userExists(createUserDto.email)) {
-      throw new ConflictException(
-        `An account with email ${createUserDto.email} already exists`,
-      );
+      throw new UserAlreadyExistsException(createUserDto.email);
     }
-    return this.userService.createUser(createUserDto);
+    return await this.userService.createUser(createUserDto);
   }
 
   @Get('/all')
@@ -34,14 +38,17 @@ export class UserController {
 
   @Post('/find')
   async checkIfUserExists(@Body('email') email: string): Promise<boolean> {
-    console.log(email);
-
-    return this.userService.userExists(email);
+    return await this.userService.userExists(email);
   }
 
   @Get(':id')
   async findOneUser(@Param('id') id: string): Promise<User> {
-    return this.userService.findOne(id);
+    const user = await this.userService.findOne(id);
+    if (user === null) {
+      throw new UserNotFoundException();
+    }
+
+    return user;
   }
 
   @Patch(':id')
@@ -51,11 +58,18 @@ export class UserController {
   ) {
     const dto = updateUserDto;
     dto.id = id;
-    return this.userService.update(dto);
+    const user = await this.userService.update(dto);
+    if (user === null) {
+      throw new UserNotFoundException();
+    }
   }
 
   @Delete(':id')
-  deleteUser(@Param('id') id: string) {
-    return this.userService.deleteUser(id);
+  async deleteUser(@Param('id') id: string) {
+    const user = await this.userService.findOne(id);
+    if (user === null) {
+      throw new UserNotFoundException();
+    }
+    return user;
   }
 }
