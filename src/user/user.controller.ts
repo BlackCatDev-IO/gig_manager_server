@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ConflictException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -14,12 +15,15 @@ import { User } from './entities/user.entity';
 
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly userService: UserService, // private readonly fileService: FileService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Post('/add')
   async createUser(@Body() createUserDto: CreateUserDto) {
+    if (await this.userService.userExists(createUserDto.email)) {
+      throw new ConflictException(
+        `An account with email ${createUserDto.email} already exists`,
+      );
+    }
     return this.userService.createUser(createUserDto);
   }
 
