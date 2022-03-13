@@ -3,10 +3,13 @@ import { AppModule } from './app.module';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const port = process.env.PORT || 4000;
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: new Logger(),
+  });
   app.useStaticAssets(join(__dirname, '..', 'static'));
 
   const config = new DocumentBuilder()

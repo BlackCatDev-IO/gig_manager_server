@@ -1,6 +1,6 @@
 export class CreateCompanyDto {
   title: string;
-  email?: [string];
+  email?: string[];
   phoneNumber?: string;
   address?: string;
 }

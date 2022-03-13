@@ -8,7 +8,7 @@ export class User extends PartialType(Document) {
   email: string;
   phoneNumber?: number;
   rate?: number;
-  jobs?: [Job];
-  companies?: [string];
-  files?: [Types.ObjectId];
+  jobs?: Job[];
+  companies?: string[];
+  files?: Types.ObjectId[];
 }
