@@ -4,6 +4,7 @@
 src/config/api.keys.ts
 .DS_Store
 /*.env
+.history/
 
 # Logs
 logs
