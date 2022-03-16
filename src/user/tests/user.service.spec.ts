@@ -18,7 +18,7 @@ describe('UserService', () => {
   beforeEach(async () => {
     module = await Test.createTestingModule({
       imports: [
-        rootMongooseTestModule(),
+        rootMongooseTestModule(), // in memory MongoDB server
         MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
       ],
       providers: [UserService],
@@ -38,13 +38,13 @@ describe('UserService', () => {
       firstName: 'Dave',
       lastName: 'Daverson',
       email: 'dave@aol.com',
+      accountCreatedDate: new Date(),
     };
 
     const newUser = await userService.createUser(mockUserDave);
 
     expect(newUser).toMatchObject(mockUserDave);
     expect(newUser.companies).toEqual([]);
-    expect(newUser.files).toEqual([]);
     expect(newUser.jobs).toEqual([]);
     expect(newUser._id != null);
     expect(typeof newUser._id === 'string');
@@ -84,7 +84,7 @@ describe('UserService', () => {
       phoneNumber: 5559874565,
     };
 
-    const updatedUser = await userService.update(updateParams);
+    const updatedUser = await userService.updateUser(updateParams);
 
     expect(updatedUser.phoneNumber).toEqual(5559874565);
   });
@@ -115,6 +115,15 @@ describe('UserService', () => {
     expect(doIExist).toEqual(false);
   });
 
+  it('should return results of query', async () => {
+    const deb = await userService.createUser(mockUserDeb);
+
+    const query = { firstName: 'Deb' };
+    const result = await userService.query(query);
+
+    expect(result[0]._id.toString()).toEqual(deb._id.toString());
+  });
+
   afterEach(async () => {
     await closeMongoConnection();
   });
@@ -124,16 +133,26 @@ const mockUserDave: CreateUserDto = {
   firstName: 'Dave',
   lastName: 'Daverson',
   email: 'dave@aol.com',
+  accountCreatedDate: new Date(),
 };
 
 const mockUserBarb: CreateUserDto = {
   firstName: 'Barb',
   lastName: 'Barberson',
   email: 'barb@aol.com',
+  accountCreatedDate: new Date(),
 };
 
 const mockUserBob: CreateUserDto = {
   firstName: 'Bob',
   lastName: 'Boberson',
   email: 'bob@aol.com',
+  accountCreatedDate: new Date(),
+};
+
+const mockUserDeb: CreateUserDto = {
+  firstName: 'Deb',
+  lastName: 'Debberrson',
+  email: 'deb@aol.com',
+  accountCreatedDate: new Date(),
 };

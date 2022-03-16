@@ -13,6 +13,12 @@ export class UserAlreadyExistsException extends ConflictException {
 export class UserNotFoundException extends NotFoundException {
   constructor() {
     super();
-    this.message = `No User Found`;
+    this.message = 'No User Found';
+  }
+}
+export class NoQueryResultsException extends NotFoundException {
+  constructor() {
+    super();
+    this.message = 'No results Found';
   }
 }

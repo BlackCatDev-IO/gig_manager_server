@@ -3,5 +3,6 @@ export class CreateUserDto {
   lastName: string;
   email: string;
   phoneNumber?: number;
+  accountCreatedDate: Date;
   rate?: number;
 }
