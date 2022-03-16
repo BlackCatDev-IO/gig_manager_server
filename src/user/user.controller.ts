@@ -6,23 +6,23 @@ import {
   Patch,
   Param,
   Delete,
-  UseFilters,
+  Logger,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { HttpExceptionFilter } from '../error-handling/exception.filters';
 import {
   NoQueryResultsException,
   UserAlreadyExistsException,
   UserNotFoundException,
 } from '../error-handling/custom-exceptions';
 
-@UseFilters(HttpExceptionFilter)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  private readonly logger = new Logger(UserController.name);
 
   @Post('/add')
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {

@@ -4,6 +4,7 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Logger } from '@nestjs/common';
+import { HttpExceptionFilter } from './error-handling/exception.filters';
 
 async function bootstrap() {
   const port = process.env.PORT || 4000;
@@ -11,6 +12,8 @@ async function bootstrap() {
     logger: new Logger(),
   });
   app.useStaticAssets(join(__dirname, '..', 'static'));
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   const config = new DocumentBuilder()
     .setTitle('Gig Manager')
